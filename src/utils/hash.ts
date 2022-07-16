@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 class BcryptHasher  {
     public readonly rounds: number = Number(process.env.HASHER_ROUND);
-    async comparePassword(provdedPass: string, storedPass: string): Promise<boolean> {
-      const passwordMatches = await compare(provdedPass, storedPass);
+    async comparePassword(providedPass: string, storedPass: string): Promise<boolean> {
+      const passwordMatches = await compare(providedPass, storedPass);
       return passwordMatches; 
     }
     async hashPassword(password: string): Promise<string> {
