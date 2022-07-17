@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { generateToken } from "../middleware/auth.middleware";
-import { User } from "../Model/user.model";
+import { User } from "../model/user.model";
 import hash from "../utils/hash";
 class AuthController {
     async login(request: Request, response : Response){

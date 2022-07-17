@@ -1,5 +1,5 @@
 import { Knex } from "knex";
-import { USER_TABLE } from "../Model/user.model";
+import { USER_TABLE } from "../model/user.model";
 
 
 export async function up(knex: Knex): Promise<void> {
