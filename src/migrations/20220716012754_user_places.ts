@@ -9,6 +9,7 @@ export async function up(knex: Knex): Promise<void> {
 
         table.foreign('user_id').references('id').inTable('users')
         table.foreign('place_id').references('id').inTable('places')
+        table.timestamps(true, true);
     })
 }
 
