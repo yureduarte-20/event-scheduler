@@ -6,6 +6,7 @@ import { Place } from "../model/place.model";
 import { iso_to_datetime } from "../utils/date";
 
 class EventController {
+    private readonly page_step = 20
     async create(req: AutenticatedRequest, response: Response) {
         const { ends_at, name, place_id, starts_at, room }: IEvent = req.body;
         const { userId } = req;
@@ -19,29 +20,44 @@ class EventController {
         const { startsAt, withOlds } = request.query;
         let page = parseInt(request.query.page as any) || 1;
         if (page < 1) page = 1;
-        if (startsAt)
-            return response.json({
-                nextPage: page + 1,
-                events: await connection
-                    .raw(`SELECT 
-                    E.name AS event_name,
-                    E.starts_at AS starts_at,
-                    E.ends_at AS ends_at,
-                    E.room AS room,
-                    E.place_id AS place_id,
-                    P.name AS place_name,
-                    ( P.street || ', ' || P.neighborhood || ', ' || p.city || ', ' || p.state || ', ' || p.country ) AS address
-                FROM events AS E
-                INNER JOIN places AS P ON P.id = E.place_id
-                WHERE E.starts_at <= ?
-                LIMIT ? OFFSET ?
-                ;`, [iso_to_datetime(new Date(startsAt as string).toISOString()), 20, (page - 1) * 20])
-            })
-            
+
+        if (startsAt) {
+            try {
+
+                let d = new Date(startsAt as string)
+                console.log(d)
+                return response.json({
+                    nextPage: page + 1,
+                    events: (await connection
+                        .raw(`
+                    SELECT 
+                        E.name AS event_name,
+                        E.starts_at AS starts_at,
+                        E.ends_at AS ends_at,
+                        E.room AS room,
+                        E.place_id AS place_id,
+                        P.name AS place_name,
+                        ( P.street || ', ' || CASE WHEN P.address_number IS NULL THEN '' ELSE  P.address_number || ', ' END
+                        || P.neighborhood || ', ' || p.city || ', ' || p.state || ', ' || p.country ) as address
+                    FROM events AS E
+                    INNER JOIN places AS P ON P.id = E.place_id
+                    WHERE E.starts_at >= ?
+                    LIMIT ? OFFSET ?
+                    ;`, [iso_to_datetime(new Date(startsAt as string).toISOString()), this.page_step, (page - 1) * this.page_step])).map((item: any) => {
+                            item.starts_at = new Date(item.starts_at);
+                            item.ends_at = new Date(item.ends_at);
+                            return item
+                        })
+                })
+            } catch (e) {
+                return response.status(422).json({ e: { message: "Data inválida" } })
+            }
+
+        }
         if (withOlds)
             return response.json({
                 nextPage: page + 1,
-                events: await connection
+                events: (await connection
                     .raw(
                         `SELECT 
                             E.name AS event_name,
@@ -50,30 +66,40 @@ class EventController {
                             E.room AS room,
                             E.place_id AS place_id,
                             P.name AS place_name,
-                            ( P.street || ', ' || P.neighborhood || ', ' || p.city || ', ' || p.state || ', ' || p.country ) AS address
+                            ( P.street || ', ' || CASE WHEN P.address_number IS NULL THEN '' ELSE  P.address_number || ', ' END
+                                || P.neighborhood || ', ' || p.city || ', ' || p.state || ', ' || p.country ) as address
                         FROM events AS E
                         INNER JOIN places AS P ON P.id = E.place_id
                         LIMIT ? OFFSET ?
-                ;`, [20, (page - 1) * 20])
+                ;`, [this.page_step, (page - 1) * this.page_step])).map((item: any) => {
+                            item.starts_at = new Date(item.starts_at);
+                            item.ends_at = new Date(item.ends_at);
+                            return item
+                        })
             })
 
         return response.json({
             nextPage: page + 1,
-            events: await connection
+            events: (await connection
                 .raw(
-                `SELECT 
+                    `SELECT 
                     E.name AS event_name,
                     E.starts_at AS starts_at,
                     E.ends_at AS ends_at,
                     E.room AS room,
                     E.place_id AS place_id,
                     P.name AS place_name,
-                    ( P.street || ', ' || P.neighborhood || ', ' || p.city || ', ' || p.state || ', ' || p.country ) AS address
+                    ( P.street || ', ' || CASE WHEN P.address_number IS NULL THEN '' ELSE  P.address_number || ', ' END
+                     || P.neighborhood || ', ' || p.city || ', ' || p.state || ', ' || p.country ) as address
                 FROM events AS E
                 INNER JOIN places AS P ON P.id = E.place_id
                 WHERE E.ends_at >= ?
                 LIMIT ? OFFSET ?
-                ;`, [iso_to_datetime(new Date().toISOString()), 20, (page - 1) * 20])
+                ;`, [iso_to_datetime(new Date().toISOString()), this.page_step, (page - 1) * this.page_step])).map((item: any) => {
+                        item.starts_at = new Date(item.starts_at);
+                        item.ends_at = new Date(item.ends_at);
+                        return item
+                    })
         })
     }
 }

@@ -7,7 +7,6 @@ export interface IPlace {
     neighborhood?: string;
     street?: string;
     city: string;
-    cep: string;
     state: string;
     country: string;
     address_number?: string;
@@ -22,14 +21,13 @@ export class Place extends Model implements IPlace {
     public neighborhood?: string;
     public street?: string;
     public city: string;
-    public cep: string;
     public state: string;
     public country: string;
     public address_number?: string;
     constructor(
         {
             id,
-            cep,
+            
             city,
             country,
             name,
@@ -40,7 +38,6 @@ export class Place extends Model implements IPlace {
             created_at, updated_at }:
             IPlaceModel) {
         super({ created_at, updated_at, id })
-        this.cep = cep
         this.city = city
         this.country = country
         this.name = name
@@ -50,8 +47,8 @@ export class Place extends Model implements IPlace {
         this.address_number = address_number
     }
 
-    static async create({ cep, city, country, name, state, neighborhood, street, address_number }: IPlace) {
-        return await connection.insert<Place>({ cep, city, country, name, state, neighborhood, street, address_number }).into("places")
+    static async create({  city, country, name, state, neighborhood, street, address_number }: IPlace) {
+        return await connection.insert<Place>({  city, country, name, state, neighborhood, street, address_number }).into("places")
     }
     static async findById(place_id: number) {
         const place_data = await connection.select<Place>('*').from(PLACE_TABLE).where("id", place_id).first();

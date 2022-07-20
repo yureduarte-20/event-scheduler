@@ -6,7 +6,7 @@ const connection = knex({
         filename: "src/database/dev.sqlite3",
     },
     migrations: {
-        directory: './migrations',
+        directory: '../migrations',
         database:'dev'
     },
     useNullAsDefault: true

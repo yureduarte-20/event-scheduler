@@ -8,7 +8,9 @@ class UserController {
     public readonly USER_TABLE = 'users'
     async profile(request: Request, response: Response) {
         return response.json(
-            await connection.select('id', 'name', 'email').from('users').first()
+            await connection
+            .select('id', 'name', 'email')
+            .from('users').first()
         )
     }
 
