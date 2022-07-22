@@ -1,0 +1,498 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Event Scheduler",
+    "description": "",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Yure Samarone Gomes Duarte",
+      "email": "yureduarte4554@gmail.com"
+    }
+  },
+  "paths": {
+    "/places": {
+      "get": {
+        "tags":["Place Crud Operation"],
+        "summary": "Get all Places",
+        "description": "retrieve all places registred in the API.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Place"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "security":[{
+          "BearerAuth":[]
+        }],
+        "tags":["Place Crud Operation"],
+        "summary": "Create a new Place",
+        "description": "create a new place in API.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Place"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/places/{id}": {
+      "get": {
+        "tags":["Place Crud Operation"],
+        "summary": "Get specific Place",
+        "description": "retrieve the place registred in the API.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Place"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "security":[{
+          "BearerAuth":[]
+        }],
+        "tags":["Place Crud Operation"],
+        "summary": "Get specific Place",
+        "description": "retrieve the place registred in the API.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          }
+        }
+      }
+    },
+    "/events": {
+      "get": {
+        "tags":["Event Crud Operation"],
+        "summary": "Get all events",
+        "description": "retrieve all recent events registred in the API.",
+        "parameters": [
+          {
+            "description": "retrieve all events, even those that have passed.",
+            "name": "withOlds",
+            "schema": {
+              "type": "boolean"
+            },
+            "in": "query",
+            "required": false
+          },
+          {
+            "name": "startsAt",
+            "description": "retrieve events which match with provided date.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "event_name": {
+                        "type": "string"
+                      },
+                      "starts_at": {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "ends_at": {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "room": {
+                        "type": "string"
+                      },
+                      "place_name": {
+                        "type": "string"
+                      },
+                      "place_id": {
+                        "type": "number"
+                      },
+                      "address": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/event": {
+      "post": {
+        "security":[{
+          "BearerAuth":[]
+        }],
+        "tags":["Event Crud Operation"],
+        "summary": "Create a new Event",
+        "description": "create a new Event in API.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Event"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/event/{id}": {
+      "summary": "Edit an event",
+      "description": "route responsible to create an event",
+      "get": {
+        "tags":["Event Crud Operation"],
+        "description": "OK",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ]
+      },
+      "patch": {
+        "security":[{
+          "BearerAuth":[]
+        }],
+        "tags":["Event Crud Operation"],
+        "description": "No content",
+        "responses": {
+          "204": {
+            "description": "no content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Event"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ]
+      }
+    },
+    "/login": {
+      "summary": "Login API",
+      "description": "route responsible to log-in",
+      "post": {
+        "tags":["User Crud Operation"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signup": {
+      "summary": "Create an account",
+      "description": "route responsible to create an account",
+      "post": {
+        "tags":["User Crud Operation"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile": {
+      "get": {
+        "security":[{
+          "BearerAuth":[]
+        }],
+        "tags":["User Crud Operation"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "security":[{
+          "BearerAuth":[]
+        }],
+        "tags":["User Crud Operation"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No content",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "security": [
+      {
+        "ApiKeyAuth": []
+      }
+    ],
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "Place": {
+        "title": "Place",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "neighborhood": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "address_number": {
+            "type": "string"
+          }
+        }
+      },
+      "Event": {
+        "title": "Event",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date"
+          },
+          "room": {
+            "type": "string"
+          },
+          "place_id": {
+            "type": "number"
+          },
+          "user_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "starts_at",
+          "ends_at",
+          "place_id",
+          "user_id"
+        ]
+      },
+      "User": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ]
+      }
+    }
+  }
+}

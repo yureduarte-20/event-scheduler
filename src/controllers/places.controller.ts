@@ -42,7 +42,6 @@ class PlacesController {
         if (!place_saved) return response.status(404).json({ error: { message: "Lugar não encontrado" } });
         const { user_id } = await connection.select("user_id").from("user_places").where("id", place_saved.id).first();
         if (!user_id) return response.status(404).json();
-        console.log(user_id, userId);
         if (userId !== user_id) return response.status(403).json({ error: { message: "Você só pode alterar lugares que você criou, mas você pode criar um." } });
         place_saved.city = city ?? place_saved.city;
         place_saved.country = country ?? place_saved.country;

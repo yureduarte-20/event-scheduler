@@ -15,5 +15,8 @@ export default {
         body('ends_at').isDate().notEmpty().optional(),
         body('room').optional().optional(),
         body('place_id').isInt().optional(),
+    ],
+    getById: [
+        param('id').isNumeric().notEmpty()
     ]
 }

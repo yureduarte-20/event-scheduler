@@ -62,4 +62,5 @@ export class Place extends Model implements IPlace {
     async save() {
         return await connection(PLACE_TABLE).where<Place>("id", this.id).update<Place>({ ...this })
     }
+    
 }

@@ -6,11 +6,11 @@ import { User } from '../model/user.model';
 import hash from '../utils/hash';
 class UserController {
     public readonly USER_TABLE = 'users'
-    async profile(request: Request, response: Response) {
+    async profile(request: AutenticatedRequest, response: Response) {
         return response.json(
             await connection
             .select('id', 'name', 'email')
-            .from('users').first()
+            .from('users').where('id', request.userId).first()
         )
     }
 

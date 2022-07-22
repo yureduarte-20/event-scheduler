@@ -4,10 +4,10 @@ export default {
     signup: [
         body('name').isString().notEmpty(),
         body('email').isString().notEmpty().isEmail(),
-        body('password').isStrongPassword({ minLength: 8 }),
+        body('password').isString().isLength( { min:8 } )
     ],
     login: [
-        body('email', "Email invaálido").isEmail(),
+        body('email', "Email inválido").isEmail(),
         body('password').isString().isLength({ min:8 })
     ]
 }

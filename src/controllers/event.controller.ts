@@ -102,6 +102,31 @@ class EventController {
                     })
         })
     }
+
+    async findById(request: Request, response: Response) {
+        const event = await Event.findById(parseInt(request.params.id));
+        if (!event) return response.status(404).json({ error: { message: "Não encontrado" } })
+        return response.json(event);
+    }
+    async edit(request: AutenticatedRequest, response: Response) {
+        const { userId } = request;
+        const { id: eventId } = request.params;
+        const { ends_at, name, place_id, room, starts_at }: Partial<IEvent> = request.body;
+        const event = await Event.findById(parseInt(eventId));
+        if (!event) return response.status(404).json({ error: { message: "evento não encontrado." } });
+        if (event.user_id !== userId) return response.status(403).json({ error: { message: "Você só pode editar eventos criados por você." } });
+        event.name = name ?? event.name;
+        event.ends_at = ends_at ?? event.ends_at;
+        event.starts_at = starts_at ?? event.starts_at;
+        event.room = room ?? event.room;
+        event.place_id = place_id ?? event.place_id;
+        try {
+            await event.save();
+            return response.status(204).send();
+        } catch (e) {
+            return response.status(422).json({ error: { message: 'Erro ao atualizar' }, errors: e });
+        }
+    }
 }
 
 
