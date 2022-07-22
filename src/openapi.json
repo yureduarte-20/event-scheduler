@@ -12,6 +12,9 @@
   "paths": {
     "/places": {
       "get": {
+        "security":[{
+          "BearerAuth":[]
+        }],
         "tags":["Place Crud Operation"],
         "summary": "Get all Places",
         "description": "retrieve all places registred in the API.",
@@ -67,6 +70,9 @@
     },
     "/places/{id}": {
       "get": {
+        "security":[{
+          "BearerAuth":[]
+        }],
         "tags":["Place Crud Operation"],
         "summary": "Get specific Place",
         "description": "retrieve the place registred in the API.",

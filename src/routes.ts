@@ -34,7 +34,7 @@ router.get('/places', verifyToken, ...placeValidator.get, (req, res) => {
     if (!validResult.isEmpty()) return res.status(400).json({ error: { message: "Erro de Validação" }, errors: validResult.array() });
     return placesController.index(req as AutenticatedRequest, res);
 });
-router.get('/places/:id', ...placeValidator.getById, (req, res) => {
+router.get('/places/:id', verifyToken,...placeValidator.getById, (req, res) => {
     const validResult: Result<ValidationError> = validationResult(req);
     if (!validResult.isEmpty()) return res.status(400).json({ error: { message: "Erro de Validação" }, errors: validResult.array() })
     return placesController.find(req as AutenticatedRequest, res)
