@@ -15,8 +15,8 @@
   },
   "scripts": {
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
-    "postinstall": "yarn knex --knexfile src/knexfile.ts migrate:latest",
-    "start": "yarn tsc && node build/server.js"
+    "postinstall": "yarn tsc",
+    "start": "node build/server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
